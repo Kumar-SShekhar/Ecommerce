@@ -1,11 +1,11 @@
-package com.shekhar.ecommerce.application.dto.requestDto;
+package com.shekhar.ecommerce.application.dto.responseDto;
 
-import com.shekhar.ecommerce.application.model.User;
 import lombok.Getter;
 
 @Getter
-public class AddressRequest {
+public class AddressResponse {
 
+    private Long id;
     private String name;
     private String addressLine1;
     private String addressLine2;
@@ -13,5 +13,4 @@ public class AddressRequest {
     private String postalCode;
     private String state;
     private String phoneNumber;
-    private User user;
 }

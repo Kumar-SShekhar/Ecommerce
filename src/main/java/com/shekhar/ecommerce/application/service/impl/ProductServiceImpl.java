@@ -20,6 +20,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<Product> findAllProductsInCategory(Long categoryId) {
+        return null;
+    }
+
+    @Override
     public Product updateProduct(Long id, ProductRequest productDto) {
         return null;
     }

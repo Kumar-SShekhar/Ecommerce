@@ -25,7 +25,7 @@ public class Order {
 
     private boolean isDelivered;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 }

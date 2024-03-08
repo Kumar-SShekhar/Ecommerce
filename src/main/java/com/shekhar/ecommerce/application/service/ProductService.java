@@ -11,6 +11,7 @@ public interface ProductService {
 
     public Product addProduct(ProductRequest productDto);
     public List<Product> findAllProducts();
+    public List<Product> findAllProductsInCategory(Long categoryId);
     public Product updateProduct(Long id, ProductRequest productDto);
     public Product deleteProduct(Long id);
 }

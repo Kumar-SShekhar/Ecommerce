@@ -1,5 +1,6 @@
 package com.shekhar.ecommerce.application.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,7 +16,6 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-
     private String addressLine1;
     private String addressLine2;
     private String city;
@@ -25,8 +25,8 @@ public class Address {
 
 
 
-
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;
 }
