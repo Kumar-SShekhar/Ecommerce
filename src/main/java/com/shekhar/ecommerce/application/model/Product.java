@@ -20,13 +20,13 @@ public class Product {
     private String quantity;
     private boolean isAvailable;
 
-
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     @ManyToOne
     @JoinColumn(name = "seller_id")
     private Seller seller;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
+
 }

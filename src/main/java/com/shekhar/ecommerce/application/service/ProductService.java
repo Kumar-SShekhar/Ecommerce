@@ -1,6 +1,7 @@
 package com.shekhar.ecommerce.application.service;
 
 import com.shekhar.ecommerce.application.dto.requestDto.ProductRequest;
+import com.shekhar.ecommerce.application.dto.responseDto.ProductResponse;
 import com.shekhar.ecommerce.application.model.Product;
 import org.springframework.stereotype.Service;
 
@@ -9,9 +10,11 @@ import java.util.List;
 @Service
 public interface ProductService {
 
-    public Product addProduct(ProductRequest productDto);
-    public List<Product> findAllProducts();
-    public List<Product> findAllProductsInCategory(Long categoryId);
-    public Product updateProduct(Long id, ProductRequest productDto);
-    public Product deleteProduct(Long id);
+    public ProductResponse addProduct(ProductRequest productRequest);
+    public Product findProduct(Long id);
+    public ProductResponse findProductById(Long id);
+    public List<ProductResponse> findAllProducts();
+    public List<ProductResponse> findAllProductsInCategory(Long categoryId);
+    public ProductResponse updateProduct(Long id, ProductRequest productRequest);
+    public ProductResponse deleteProduct(Long id);
 }

@@ -17,12 +17,22 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private Integer cartValue;
 
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany
-    @JoinColumn(name = "product_id")
+//    @JoinColumn(name = "product_id")
     private List<Product> products;
+
+
+    public void addProduct(Product product){
+        products.add(product);
+    }
+
+    public void removeProduct(Product product){
+        products.remove(product);
+    }
 }
