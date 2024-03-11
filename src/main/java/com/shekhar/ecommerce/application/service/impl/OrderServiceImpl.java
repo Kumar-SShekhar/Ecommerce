@@ -1,7 +1,7 @@
 package com.shekhar.ecommerce.application.service.impl;
 
 import com.shekhar.ecommerce.application.model.Cart;
-import com.shekhar.ecommerce.application.model.Order;
+import com.shekhar.ecommerce.application.model.OrderEntity;
 import com.shekhar.ecommerce.application.model.OrderStatus;
 import com.shekhar.ecommerce.application.model.User;
 import com.shekhar.ecommerce.application.repository.CartRepository;
@@ -13,7 +13,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -25,15 +24,16 @@ public class OrderServiceImpl implements OrderService {
     private final CartService cartService;
 
     @Override
-    public Order placeOrder(Long cartId) {
+    public OrderEntity placeOrder(Long cartId) {
         Cart cart =  cartService.findCart(cartId);
         User user = cart.getUser();
         if(cart.getProducts().isEmpty()){
             throw new RuntimeException("Cart is empty");
         }
 
-        Order order = new Order();
+        OrderEntity order = new OrderEntity();
         order.setUser(user);
+        order.setOrderValue(cartService.findCartValue(cartId));
         order.setOrderDate(LocalDateTime.now());
         LocalDateTime deliveryDate = order.getOrderDate().plusDays(7);
         order.setDeliveryDate(deliveryDate);
@@ -51,19 +51,19 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> findAllOrders(Long userId) {
-        List<Order> orders = orderRepository.findByUserId(userId);
+    public List<OrderEntity> findAllOrders(Long userId) {
+        List<OrderEntity> orders = orderRepository.findByUserId(userId);
         return orders;
     }
 
     @Override
-    public Order findOrderById(Long id) {
+    public OrderEntity findOrderById(Long id) {
         return orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found with id: "+ id));
     }
 
     @Override
-    public Order cancelOrder(Long userId, Long id) {
-        Order order = findOrderById(id);
+    public OrderEntity cancelOrder(Long userId, Long id) {
+        OrderEntity order = findOrderById(id);
         if(order.getOrderStatus() == OrderStatus.ORDERED){
             order.setOrderStatus(OrderStatus.CANCELLED);
             orderRepository.save(order);
@@ -73,8 +73,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order markOrderDelivered(Long id) {
-        Order order =  findOrderById(id);
+    public OrderEntity markOrderDelivered(Long id) {
+        OrderEntity order =  findOrderById(id);
         if(order.getOrderStatus() == OrderStatus.ORDERED){
             order.setOrderStatus(OrderStatus.DELIVERED);
             orderRepository.save(order);
@@ -86,7 +86,7 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
-    public Order updateOrder(Long id, Order order) {
+    public OrderEntity updateOrder(Long id, OrderEntity order) {
         return null;
     }
 

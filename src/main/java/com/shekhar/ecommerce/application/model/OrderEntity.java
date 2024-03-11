@@ -10,22 +10,24 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "order")
-public class Order {
+@Entity
+public class OrderEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
 
-    private Integer price;
+    private Integer orderValue;
     private LocalDateTime orderDate;
 
     private LocalDateTime deliveryDate;
 
     private OrderStatus orderStatus;
 
-    @OneToOne()
+    @OneToOne
+//    @JoinColumn(name = "cart_id", insertable = false, updatable = false)
+//    @JoinColumn(name = "cart_id", referencedColumnName = "id")
     private Cart cart;
 
     @ManyToOne
