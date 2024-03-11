@@ -1,6 +1,7 @@
 package com.shekhar.ecommerce.application.controller;
 
 import com.shekhar.ecommerce.application.dto.requestDto.AddressRequest;
+import com.shekhar.ecommerce.application.dto.responseDto.AddressResponse;
 import com.shekhar.ecommerce.application.model.Address;
 import com.shekhar.ecommerce.application.service.AddressService;
 import lombok.Getter;
@@ -22,7 +23,7 @@ public class AddressController {
     }
 
     @GetMapping("/all")
-    public List<Address> getAll(){
+    public List<AddressResponse> getAll(){
         return addressService.findAllAddress();
     }
 

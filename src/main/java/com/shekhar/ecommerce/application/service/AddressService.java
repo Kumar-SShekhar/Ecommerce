@@ -1,6 +1,7 @@
 package com.shekhar.ecommerce.application.service;
 
 import com.shekhar.ecommerce.application.dto.requestDto.AddressRequest;
+import com.shekhar.ecommerce.application.dto.responseDto.AddressResponse;
 import com.shekhar.ecommerce.application.model.Address;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +11,7 @@ import java.util.List;
 public interface AddressService {
 
     public Address addAddress(AddressRequest addressRequest);
-    public List<Address> findAllAddress();
+    public List<AddressResponse> findAllAddress();
     public Address updateAddress(Long id,AddressRequest addressRequest);
     public Address deleteAddress(Long id);
 

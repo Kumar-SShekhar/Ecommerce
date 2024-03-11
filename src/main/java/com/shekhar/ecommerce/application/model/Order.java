@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@Entity(name = "order")
 public class Order {
 
     @Id
@@ -23,7 +23,10 @@ public class Order {
 
     private LocalDateTime deliveryDate;
 
-    private boolean isDelivered;
+    private OrderStatus orderStatus;
+
+    @OneToOne()
+    private Cart cart;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

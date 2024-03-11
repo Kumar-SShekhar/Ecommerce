@@ -26,7 +26,7 @@ public class Address {
 
 
     @ManyToOne
-    @JsonIgnore
+//    @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;
 }

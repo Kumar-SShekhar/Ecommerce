@@ -1,6 +1,7 @@
 package com.shekhar.ecommerce.application.service.impl;
 
 import com.shekhar.ecommerce.application.dto.requestDto.AddressRequest;
+import com.shekhar.ecommerce.application.dto.responseDto.AddressResponse;
 import com.shekhar.ecommerce.application.model.Address;
 import com.shekhar.ecommerce.application.repository.AddressRepository;
 import com.shekhar.ecommerce.application.service.AddressService;
@@ -38,18 +39,11 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public List<Address> findAllAddress() {
-        return addressRepository.findAll();
-    }
-
-
-    @Override
-    public List<Address> findAddressOfUserByUserId(Long userId) {
-        return addressRepository.findByUserId(userId);
-    }
-    @Override
-    public List<Address> findAddressOfUserByEmail(String email){
-        return addressRepository.findByUserEmail(email);
+    public List<AddressResponse> findAllAddress() {
+        List<Address> addresses = addressRepository.findAll();
+        List<AddressResponse> addressResponses = addresses.stream()
+                .map(address -> modelMapper.map(address, AddressResponse.class)).toList();
+        return addressResponses;
     }
 
 
@@ -77,6 +71,16 @@ public class AddressServiceImpl implements AddressService {
         Address address = addressRepository.findById(id).orElseThrow(()-> new RuntimeException("Address not found with id:"+id));
         addressRepository.delete(address);
         return address;
+    }
+
+
+    @Override
+    public List<Address> findAddressOfUserByUserId(Long userId) {
+        return addressRepository.findByUserId(userId);
+    }
+    @Override
+    public List<Address> findAddressOfUserByEmail(String email){
+        return addressRepository.findByUserEmail(email);
     }
 
 

@@ -2,6 +2,7 @@ package com.shekhar.ecommerce.application.service.impl;
 
 import com.shekhar.ecommerce.application.dto.requestDto.CartRequest;
 import com.shekhar.ecommerce.application.dto.responseDto.CartResponse;
+import com.shekhar.ecommerce.application.dto.responseDto.ProductResponse;
 import com.shekhar.ecommerce.application.model.Cart;
 import com.shekhar.ecommerce.application.model.Product;
 import com.shekhar.ecommerce.application.repository.CartRepository;
@@ -40,9 +41,12 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public List<Product> findAllProductsInCart(Long id) {
+    public List<ProductResponse> findAllProductsInCart(Long id) {
         Cart cart = findCart(id);
-        return cart.getProducts();
+        List<Product> products = cart.getProducts();
+        List<ProductResponse> productResponses = products.stream()
+                .map(product -> modelMapper.map(product, ProductResponse.class)).toList();
+        return productResponses;
     }
 
 
@@ -50,8 +54,9 @@ public class CartServiceImpl implements CartService {
     public CartResponse addProductToCart(Long id, Long productId) {
         Cart cart = findCart(id);
         Product product = productRepository.findById(productId).orElseThrow(()-> new IllegalArgumentException("Product not found "));
-        cart.addProduct(product);
+
         Integer previousCartValue = findCartValue(id);
+        cart.addProduct(product);
         cart.setCartValue(previousCartValue + product.getPrice());  //....
         cartRepository.save(cart);
         return modelMapper.map(cart, CartResponse.class);
@@ -61,6 +66,10 @@ public class CartServiceImpl implements CartService {
     public CartResponse removeProductFromCart(Long id, Long productId) {
         Cart cart = findCart(id);
         Product product = productRepository.findById(productId).orElseThrow(()-> new IllegalArgumentException("Product not found"));
+        List<Product> productsList = cart.getProducts();
+        if(!productsList.contains(product)){  // When cart doesn't contain that product
+            return null;
+        }
         cart.removeProduct(product);
         Integer prevCartValue = cart.getCartValue();
         cart.setCartValue(prevCartValue - product.getPrice());

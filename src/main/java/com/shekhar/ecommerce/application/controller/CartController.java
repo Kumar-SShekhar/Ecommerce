@@ -2,6 +2,7 @@ package com.shekhar.ecommerce.application.controller;
 
 import com.shekhar.ecommerce.application.dto.requestDto.CartRequest;
 import com.shekhar.ecommerce.application.dto.responseDto.CartResponse;
+import com.shekhar.ecommerce.application.dto.responseDto.ProductResponse;
 import com.shekhar.ecommerce.application.model.Product;
 import com.shekhar.ecommerce.application.service.CartService;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,7 @@ public class CartController {
     }
 
     @GetMapping("/all/{id}")
-    public List<Product> getAllProductsInCart(@PathVariable Long id){
+    public List<ProductResponse> getAllProductsInCart(@PathVariable Long id){
         return cartService.findAllProductsInCart(id);
     }
 
