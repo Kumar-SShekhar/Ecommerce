@@ -16,4 +16,7 @@ public interface AdminService {
     public List<OrderEntity> findAllActiveOrders();
     public List<Product> findAllProducts();
     public List<Seller> findAllSellers();
+
+    public User makeAdmin(Long userId);
+    public User removeAdmin(Long userId);
 }

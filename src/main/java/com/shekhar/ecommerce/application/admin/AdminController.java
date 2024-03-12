@@ -5,9 +5,7 @@ import com.shekhar.ecommerce.application.model.Product;
 import com.shekhar.ecommerce.application.model.Seller;
 import com.shekhar.ecommerce.application.model.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -36,5 +34,15 @@ public class AdminController {
     @GetMapping("/all-sellers")
     public List<Seller> getAllSellers(){
         return adminService.findAllSellers();
+    }
+
+    @PostMapping("/make-admin/{userId}")
+    public User makeAdmin(@PathVariable Long userId){
+        return adminService.makeAdmin(userId);
+    }
+
+    @PostMapping("/remove-admin/{userId}")
+    public User removeAdmin(@PathVariable Long userId){
+        return adminService.removeAdmin(userId);
     }
 }
