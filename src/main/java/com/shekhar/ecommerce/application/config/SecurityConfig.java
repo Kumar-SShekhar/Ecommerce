@@ -23,14 +23,14 @@ public class SecurityConfig {
         http
                 .csrf((csrf)-> csrf.disable())
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/demo").authenticated();
+                    auth.requestMatchers("/auth/demo").authenticated();
                     auth.anyRequest().permitAll();
                 })
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin(Customizer.withDefaults())
-                .formLogin(Customizer.withDefaults());
+                .httpBasic(Customizer.withDefaults());
 
         return http.build();
     }

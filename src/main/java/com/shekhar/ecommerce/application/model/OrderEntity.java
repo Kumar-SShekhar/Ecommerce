@@ -23,6 +23,7 @@ public class OrderEntity {
 
     private LocalDateTime deliveryDate;
 
+    @Enumerated(EnumType.STRING)   // By using EnumType.STRING, It will store enum values as strings in database
     private OrderStatus orderStatus;
 
     @OneToOne
