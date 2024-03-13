@@ -2,6 +2,7 @@ package com.shekhar.ecommerce.application.service.impl;
 
 import com.shekhar.ecommerce.application.dto.requestDto.ProductRequest;
 import com.shekhar.ecommerce.application.dto.responseDto.ProductResponse;
+import com.shekhar.ecommerce.application.mapper.ProductMapper;
 import com.shekhar.ecommerce.application.model.Category;
 import com.shekhar.ecommerce.application.model.Product;
 import com.shekhar.ecommerce.application.repository.CategoryRepository;
@@ -21,12 +22,15 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ModelMapper modelMapper;
     private final CategoryRepository categoryRepository;
+    private final ProductMapper productMapper;
 
     @Override
     public ProductResponse addProduct(ProductRequest productRequest) {
-        Product product = modelMapper.map(productRequest, Product.class);
+//        Product product = modelMapper.map(productRequest, Product.class);
+//        productRepository.save(product);
+        Product product = productMapper.mapProductRequestToProduct(productRequest);
         productRepository.save(product);
-        return modelMapper.map(product, ProductResponse.class);
+        return productMapper.mapProductToProductResponse(product);
     }
 
     @Override
@@ -37,24 +41,24 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponse findProductById(Long id) {
         Product product = findProduct(id);
-        return modelMapper.map(product, ProductResponse.class);
+//        return modelMapper.map(product, ProductResponse.class);
+        return productMapper.mapProductToProductResponse(product);
     }
 
     @Override
     public List<ProductResponse> findAllProducts() {
         List<Product> products = productRepository.findAll();
 //        return modelMapper.map(products, List.class);  // It will return of type List<> only
-        List<ProductResponse> productResponses = products.stream().
-                map(product -> modelMapper.map(product, ProductResponse.class)).toList(); //
+//        List<ProductResponse> productResponses = products.stream().
+//                map(product -> modelMapper.map(product, ProductResponse.class)).toList(); //
+        List<ProductResponse> productResponses = productMapper.mapProductsToProductResponses(products);
         return productResponses;
     }
 
     @Override
     public List<ProductResponse> findAllProductsInCategory(Long categoryId) {
         List<Product> products = productRepository.findByCategoryId(categoryId);
-        List<ProductResponse> productResponses = products.stream()
-                .map(product -> modelMapper.map(product, ProductResponse.class)).toList();
-        return productResponses;
+        return productMapper.mapProductsToProductResponses(products);
     }
 
     @Override
@@ -66,6 +70,6 @@ public class ProductServiceImpl implements ProductService {
     public ProductResponse deleteProduct(Long id) {
         Product product = findProduct(id);
         productRepository.delete(product);
-        return modelMapper.map(product, ProductResponse.class);
+        return productMapper.mapProductToProductResponse(product);
     }
 }

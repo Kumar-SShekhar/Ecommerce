@@ -1,5 +1,7 @@
 package com.shekhar.ecommerce.application.service.impl;
 
+import com.shekhar.ecommerce.application.dto.responseDto.OrderResponse;
+import com.shekhar.ecommerce.application.mapper.OrderMapper;
 import com.shekhar.ecommerce.application.model.Cart;
 import com.shekhar.ecommerce.application.model.OrderEntity;
 import com.shekhar.ecommerce.application.model.OrderStatus;
@@ -22,6 +24,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final CartRepository cartRepository;
     private final CartService cartService;
+    private final OrderMapper orderMapper;
 
     @Override
     public OrderEntity placeOrder(Long cartId) {
@@ -46,39 +49,40 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public User findUser(Long userId) {
-        return null;
+    public OrderEntity findOrder(Long id) {
+        return orderRepository.findById(id).orElseThrow(()-> new RuntimeException("Order not found with id: " +id));
     }
 
     @Override
-    public List<OrderEntity> findAllOrders(Long userId) {
+    public List<OrderResponse> findAllOrders(Long userId) {
         List<OrderEntity> orders = orderRepository.findByUserId(userId);
-        return orders;
+        return orderMapper.mapOrdersToOrderResponses(orders);
     }
 
     @Override
-    public OrderEntity findOrderById(Long id) {
-        return orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found with id: "+ id));
+    public OrderResponse findOrderById(Long id) {
+        OrderEntity order = orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found with id: "+ id));
+        return orderMapper.mapOrderToOrderResponse(order);
     }
 
     @Override
-    public OrderEntity cancelOrder(Long userId, Long id) {
-        OrderEntity order = findOrderById(id);
+    public OrderResponse cancelOrder(Long userId, Long id) {
+        OrderEntity order = findOrder(id);
         if(order.getOrderStatus() == OrderStatus.ORDERED){
             order.setOrderStatus(OrderStatus.CANCELLED);
             orderRepository.save(order);
-            return order;
+            return orderMapper.mapOrderToOrderResponse(order);
         }
         return null;
     }
 
     @Override
-    public OrderEntity markOrderDelivered(Long id) {
-        OrderEntity order =  findOrderById(id);
+    public OrderResponse markOrderDelivered(Long id) {
+        OrderEntity order =  findOrder(id);
         if(order.getOrderStatus() == OrderStatus.ORDERED){
             order.setOrderStatus(OrderStatus.DELIVERED);
             orderRepository.save(order);
-            return order;
+            return orderMapper.mapOrderToOrderResponse(order);
         }
         throw new IllegalArgumentException("Order is either delivered or cancelled");
     }
@@ -86,7 +90,7 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
-    public OrderEntity updateOrder(Long id, OrderEntity order) {
+    public OrderResponse updateOrder(Long id, OrderEntity order) {
         return null;
     }
 

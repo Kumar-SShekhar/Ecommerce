@@ -15,8 +15,8 @@ public class CartResponse {
     private String name;
     private Integer cartValue;
 
-    private Long userId;
-//    private User user;
+//    private Long userId;
+    private User user;
 
 //    private Long productId;
     private List<Product> products;

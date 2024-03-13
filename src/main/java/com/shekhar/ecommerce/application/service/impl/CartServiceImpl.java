@@ -3,6 +3,8 @@ package com.shekhar.ecommerce.application.service.impl;
 import com.shekhar.ecommerce.application.dto.requestDto.CartRequest;
 import com.shekhar.ecommerce.application.dto.responseDto.CartResponse;
 import com.shekhar.ecommerce.application.dto.responseDto.ProductResponse;
+import com.shekhar.ecommerce.application.mapper.CartMapper;
+import com.shekhar.ecommerce.application.mapper.ProductMapper;
 import com.shekhar.ecommerce.application.model.Cart;
 import com.shekhar.ecommerce.application.model.Product;
 import com.shekhar.ecommerce.application.repository.CartRepository;
@@ -21,6 +23,8 @@ public class CartServiceImpl implements CartService {
     private final ModelMapper modelMapper;
     private final CartRepository cartRepository;
     private final ProductRepository productRepository;
+    private final CartMapper cartMapper;
+    private final ProductMapper productMapper;
 
     @Override
     public CartResponse createCart(CartRequest cartRequest) {
@@ -37,16 +41,16 @@ public class CartServiceImpl implements CartService {
     @Override
     public CartResponse findCartById(Long id) {
         Cart cart = findCart(id);
-        return modelMapper.map(cart, CartResponse.class);
+        return cartMapper.mapCartToCartResponse(cart);
     }
 
     @Override
     public List<ProductResponse> findAllProductsInCart(Long id) {
         Cart cart = findCart(id);
         List<Product> products = cart.getProducts();
-        List<ProductResponse> productResponses = products.stream()
-                .map(product -> modelMapper.map(product, ProductResponse.class)).toList();
-        return productResponses;
+//        List<ProductResponse> productResponses = products.stream()
+//                .map(product -> modelMapper.map(product, ProductResponse.class)).toList();
+        return productMapper.mapProductsToProductResponses(products);
     }
 
 
@@ -59,7 +63,7 @@ public class CartServiceImpl implements CartService {
         cart.addProduct(product);
         cart.setCartValue(previousCartValue + product.getPrice());  //....
         cartRepository.save(cart);
-        return modelMapper.map(cart, CartResponse.class);
+        return cartMapper.mapCartToCartResponse(cart);
     }
 
     @Override
@@ -74,7 +78,7 @@ public class CartServiceImpl implements CartService {
         Integer prevCartValue = cart.getCartValue();
         cart.setCartValue(prevCartValue - product.getPrice());
         cartRepository.save(cart);
-        return modelMapper.map(cart, CartResponse.class);
+        return cartMapper.mapCartToCartResponse(cart);
     }
 
     @Override
