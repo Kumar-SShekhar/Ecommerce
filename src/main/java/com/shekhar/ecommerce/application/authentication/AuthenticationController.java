@@ -1,5 +1,6 @@
 package com.shekhar.ecommerce.application.authentication;
 
+import com.shekhar.ecommerce.application.customresponse.ApiResponse;
 import com.shekhar.ecommerce.application.dto.requestDto.LoginRequest;
 import com.shekhar.ecommerce.application.dto.requestDto.RegisterRequest;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,19 +18,25 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> login(@RequestBody LoginRequest loginRequest) {
-        return new ResponseEntity<>(authenticationService.loginUser(loginRequest), HttpStatus.OK);
+    public ResponseEntity<ApiResponse> login(@RequestBody LoginRequest loginRequest) {
+        AuthenticationResponse authenticationResponse = authenticationService.loginUser(loginRequest);
+        ApiResponse apiResponse = new ApiResponse("Success", "Login Successful", authenticationResponse);
+        return ResponseEntity.status(200).body(apiResponse);
     }
 
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest registerRequest) {
-        return new ResponseEntity<>(authenticationService.registerUser(registerRequest), HttpStatus.CREATED);
+    public ResponseEntity<ApiResponse> register(@RequestBody RegisterRequest registerRequest) {
+        AuthenticationResponse authenticationResponse = authenticationService.registerUser(registerRequest);
+        ApiResponse apiResponse = new ApiResponse("Success", "Registration Successful", authenticationResponse);
+        return ResponseEntity.status(200).body(apiResponse);
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<AuthenticationResponse> refresh(HttpServletRequest request, HttpServletResponse response){
-        return new ResponseEntity<>(authenticationService.refreshToken(request, response), HttpStatus.OK);
+    public ResponseEntity<ApiResponse> refresh(HttpServletRequest request, HttpServletResponse response){
+        AuthenticationResponse authenticationResponse = authenticationService.refreshToken(request, response);
+        ApiResponse apiResponse = new ApiResponse("Success", "Refresh Token generated successfully", authenticationResponse);
+        return ResponseEntity.status(200).body(apiResponse);
     }
 
 

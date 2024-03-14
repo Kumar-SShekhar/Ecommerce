@@ -10,13 +10,13 @@ import java.util.List;
 @Service
 public interface AddressService {
 
-    public Address addAddress(AddressRequest addressRequest);
+    public AddressResponse addAddress(AddressRequest addressRequest);
     public List<AddressResponse> findAllAddress();
-    public Address updateAddress(Long id,AddressRequest addressRequest);
-    public Address deleteAddress(Long id);
+    public AddressResponse updateAddress(Long id,AddressRequest addressRequest);
+    public AddressResponse deleteAddress(Long id);
 
 
-    public List<Address> findAddressOfUserByUserId(Long userId);
-    public List<Address> findAddressOfUserByEmail(String email);
+    public List<AddressResponse> findAddressOfUserByUserId(Long userId);
+    public List<AddressResponse> findAddressOfUserByEmail(String email);
 
 }

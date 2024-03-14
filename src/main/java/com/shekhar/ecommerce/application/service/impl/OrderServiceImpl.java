@@ -27,7 +27,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderMapper orderMapper;
 
     @Override
-    public OrderEntity placeOrder(Long cartId) {
+    public OrderResponse placeOrder(Long cartId) {
         Cart cart =  cartService.findCart(cartId);
         User user = cart.getUser();
         if(cart.getProducts().isEmpty()){
@@ -42,7 +42,8 @@ public class OrderServiceImpl implements OrderService {
         order.setDeliveryDate(deliveryDate);
         order.setOrderStatus(OrderStatus.ORDERED);
         try {
-            return orderRepository.save(order);
+            OrderEntity savedOrder = orderRepository.save(order);
+            return orderMapper.mapOrderToOrderResponse(savedOrder);
         } catch (DataAccessException ex) {
             throw new RuntimeException("Failed to place order", ex);
         }

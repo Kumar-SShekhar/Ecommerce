@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public interface OrderService {
 
-    public OrderEntity placeOrder(Long cartId);
+    public OrderResponse placeOrder(Long cartId);
     public OrderEntity findOrder(Long id);
     public List<OrderResponse> findAllOrders(Long userId);
     public OrderResponse findOrderById(Long id);

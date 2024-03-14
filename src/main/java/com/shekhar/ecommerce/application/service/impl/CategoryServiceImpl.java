@@ -1,5 +1,8 @@
 package com.shekhar.ecommerce.application.service.impl;
 
+import com.shekhar.ecommerce.application.dto.requestDto.CategoryRequest;
+import com.shekhar.ecommerce.application.dto.responseDto.CategoryResponse;
+import com.shekhar.ecommerce.application.mapper.CategoryMapper;
 import com.shekhar.ecommerce.application.model.Category;
 import com.shekhar.ecommerce.application.repository.CategoryRepository;
 import com.shekhar.ecommerce.application.service.CategoryService;
@@ -13,31 +16,39 @@ import java.util.List;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final CategoryMapper categoryMapper;
 
     @Override
-    public Category addCategory(Category category) {
-        return categoryRepository.save(category);
+    public CategoryResponse addCategory(CategoryRequest categoryRequest) {
+        Category category =  categoryMapper.mapCategoryRequestToCategory(categoryRequest);
+        categoryRepository.save(category);
+        return categoryMapper.mapCategoryToCategoryResponse(category);
+    }
+
+    public Category findCategory(Long id){
+        return categoryRepository.findById(id).orElseThrow(()-> new RuntimeException("Category not Found with id: "+ id));
+    }
+    @Override
+    public CategoryResponse findCategoryById(Long id) {
+        Category category=categoryRepository.findById(id).orElseThrow(()-> new RuntimeException("Category not found with id: "+ id));
+        return categoryMapper.mapCategoryToCategoryResponse(category);
     }
 
     @Override
-    public Category findCategoryById(Long id) {
-        return categoryRepository.findById(id).orElseThrow(()-> new RuntimeException("Category not found with id: "+ id));
+    public List<CategoryResponse> findAllCategory() {
+        List<Category> categories = categoryRepository.findAll();
+        return categoryMapper.mapCategoriesToCategoryResponses(categories);
     }
 
     @Override
-    public List<Category> findAllCategory() {
-        return categoryRepository.findAll();
-    }
-
-    @Override
-    public Category updateCategory(Long id, Category category) {
+    public CategoryResponse updateCategory(Long id, CategoryRequest categoryRequest) {
         return null;
     }
 
     @Override
-    public Category deleteCategory(Long id) {
-        Category category = findCategoryById(id);
+    public CategoryResponse deleteCategory(Long id) {
+        Category category = findCategory(id);
         categoryRepository.delete(category);
-        return category;
+        return categoryMapper.mapCategoryToCategoryResponse(category);
     }
 }

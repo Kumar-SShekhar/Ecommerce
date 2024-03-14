@@ -2,6 +2,7 @@ package com.shekhar.ecommerce.application.service.impl;
 
 import com.shekhar.ecommerce.application.dto.requestDto.AddressRequest;
 import com.shekhar.ecommerce.application.dto.responseDto.AddressResponse;
+import com.shekhar.ecommerce.application.mapper.AddressMapper;
 import com.shekhar.ecommerce.application.model.Address;
 import com.shekhar.ecommerce.application.repository.AddressRepository;
 import com.shekhar.ecommerce.application.service.AddressService;
@@ -19,68 +20,48 @@ public class AddressServiceImpl implements AddressService {
 
     private final AddressRepository addressRepository;
     private final ModelMapper modelMapper;
+    private final AddressMapper addressMapper;
 
     @Override
-    public Address addAddress(AddressRequest addressRequest) {
-//        Address address = new Address();
-//        address.setName(addressRequest.getName());
-//        address.setAddressLine1(addressRequest.getAddressLine1());
-//        address.setAddressLine2(addressRequest.getAddressLine2());
-//        address.setCity(addressRequest.getCity());
-//        address.setPostalCode(addressRequest.getPostalCode());
-//        address.setState(addressRequest.getState());
-//        address.setPhoneNumber(addressRequest.getPhoneNumber());
-//        address.setUser(addressRequest.getUser());
+    public AddressResponse addAddress(AddressRequest addressRequest) {
+        Address address = addressMapper.mapAddressRequestToAddress(addressRequest);
+        addressRepository.save(address);
 
-        Address address1 = modelMapper.map(addressRequest, Address.class);
-        addressRepository.save(address1);
-        return address1;
+        return addressMapper.mapAddressToAddressResponse(address);
 
     }
 
     @Override
     public List<AddressResponse> findAllAddress() {
         List<Address> addresses = addressRepository.findAll();
-        List<AddressResponse> addressResponses = addresses.stream()
-                .map(address -> modelMapper.map(address, AddressResponse.class)).toList();
-        return addressResponses;
+        return addressMapper.mapAddressesToAddressResponses(addresses);
     }
 
 
     @Override
-    public Address updateAddress(Long id, AddressRequest addressRequest) {
-        Address address = addressRepository.findById(id).orElseThrow(()-> new RuntimeException("Address not found with id:"+id));
-//        Address updatedAddress = modelMapper.map(addressRequest, Address.class);
-//        return addressRepository.save(updatedAddress);
-//        BeanUtils.copyProperties(addressRequest, address);
-//        return addressRepository.save(address);
-
-
-        address.setName(addressRequest.getName());
-        address.setAddressLine1(addressRequest.getAddressLine1());
-        address.setAddressLine2(addressRequest.getAddressLine2());
-        address.setCity(addressRequest.getCity());
-        address.setPostalCode(addressRequest.getPostalCode());
-        address.setState(addressRequest.getState());
-        address.setPhoneNumber(addressRequest.getPhoneNumber());
-        return addressRepository.save(address);
+    public AddressResponse updateAddress(Long id, AddressRequest addressRequest) {
+        Address address = addressMapper.mapAddressRequestToAddress(addressRequest);
+        addressRepository.save(address);
+        return addressMapper.mapAddressToAddressResponse(address);
     }
 
     @Override
-    public Address deleteAddress(Long id) {
+    public AddressResponse deleteAddress(Long id) {
         Address address = addressRepository.findById(id).orElseThrow(()-> new RuntimeException("Address not found with id:"+id));
         addressRepository.delete(address);
-        return address;
+        return addressMapper.mapAddressToAddressResponse(address);
     }
 
 
     @Override
-    public List<Address> findAddressOfUserByUserId(Long userId) {
-        return addressRepository.findByUserId(userId);
+    public List<AddressResponse> findAddressOfUserByUserId(Long userId) {
+        List<Address> addresses = addressRepository.findByUserId(userId);
+        return addressMapper.mapAddressesToAddressResponses(addresses);
     }
     @Override
-    public List<Address> findAddressOfUserByEmail(String email){
-        return addressRepository.findByUserEmail(email);
+    public List<AddressResponse> findAddressOfUserByEmail(String email){
+        List<Address> addresses = addressRepository.findByUserEmail(email);
+        return addressMapper.mapAddressesToAddressResponses(addresses);
     }
 
 
