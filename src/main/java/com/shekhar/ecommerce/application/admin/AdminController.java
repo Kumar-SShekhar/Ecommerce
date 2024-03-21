@@ -4,6 +4,7 @@ import com.shekhar.ecommerce.application.model.OrderEntity;
 import com.shekhar.ecommerce.application.model.Product;
 import com.shekhar.ecommerce.application.model.Seller;
 import com.shekhar.ecommerce.application.model.User;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
+//@SecurityRequirement(name = "bearerAuth")  // It will restrict this controller to access without JWT
 @RequiredArgsConstructor
 public class AdminController {
 
